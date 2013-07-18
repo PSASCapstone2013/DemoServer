@@ -1,0 +1,37 @@
+Author: Bogdan Kovch
+Date:   July 17, 2013
+
+Description:
+    Program server.py opens a *.pcap file containing captured network packets and resends them
+    through a network socket.
+
+Required Modules:
+    - dpkt; URL: http://code.google.com/p/dpkt/downloads/list
+    
+Command-Line Arguments:
+      -h, --help            show this help message and exit
+      -f FILENAME, --file=FILENAME
+                            pcap file containing files to be retransmitted
+      -s SKIP_TIME, --skip=SKIP_TIME
+                            time in seconds to skip at the beginning
+      -t, --fast            send packets immediately one after another ignoring time intervals
+      -d, --debug           show debug messages
+      
+Helpful Information:
+    - 2013-06-30-1.pcap contains packets captured during PSAS rocket launch on June 30th, 2013s
+    - It contains 15332 frames captured within 45.65 minutes
+    - Time Periods:
+        Start (sec) End (sec)   Duration (min)  Activity
+        ------------------------------------------------
+        0           756         12.6            sending
+        756         2454        28.3            idle
+        2454        2509        0.9             sending
+        2509        2577        1.1             idle
+        2577        2739        2.7             sending
+    - To make the program skip processing first packets and start from later time, use
+        python server.py -s NNNN
+      where NNNN is the number of seconds to skip. For example, to start watching/sending packets
+      from time period 3 (and show debug information), use 
+        python server.py -d -s 2454
+    - To process all packets without time intervals between, add the '-t' option:
+        python server.py -d -s 2454 -t
