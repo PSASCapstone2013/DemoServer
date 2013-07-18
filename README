@@ -2,8 +2,7 @@ Author: Bogdan Kovch
 Date:   July 17, 2013
 
 Description:
-    Program server.py opens a *.pcap file containing captured network packets and resends them
-    through a network socket.
+    Program server.py opens a *.pcap file containing captured network packets and resends them through a network socket.
 
 Required Modules:
     - dpkt; URL: http://code.google.com/p/dpkt/downloads/list
@@ -30,8 +29,7 @@ Helpful Information:
         2577        2739        2.7             sending
     - To make the program skip processing first packets and start from later time, use
         python server.py -s NNNN
-      where NNNN is the number of seconds to skip. For example, to start watching/sending packets
-      from time period 3 (and show debug information), use 
+      where NNNN is the number of seconds to skip. For example, to start watching/sending packets from time period 3 (and show debug information), use 
         python server.py -d -s 2454
     - To process all packets without time intervals between, add the '-t' option:
         python server.py -d -s 2454 -t
