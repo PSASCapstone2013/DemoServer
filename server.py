@@ -14,8 +14,8 @@ IP = socket.gethostbyname(socket.gethostname()) # local IP address (ex.: 192.168
 # IP = '' # localhost IP address (ex.: 127.0.0.1)
 # IP = "eth0" # localhost ???
 # IP = "eth1" # send directly to network adapter ???
-PORT = 35001 # port number defined by OS
-# PORT = 36000
+PORT = 35001  # port number used in PSAS programs
+# PORT = 36000 # old port number
 MAX_IDLE_TIME = 30 # maximum time (in seconds) interval between packets. Need to skip long intervals.
 
 def main():
