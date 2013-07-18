@@ -16,6 +16,7 @@ IP = socket.gethostbyname(socket.gethostname()) # local IP address (ex.: 192.168
 # IP = "eth1" # send directly to network adapter ???
 PORT = 35001 # port number defined by OS
 # PORT = 36000
+MAX_IDLE_TIME = 30 # maximum time (in seconds) interval between packets. Need to skip long intervals.
 
 def main():
     """ This function acts like a hub for the rest of the code in the program. """
@@ -80,7 +81,14 @@ def processFrames():
             ts_prev = ts
             ts_start = ts
         if not options.fast: # send packets with intervals according to their timestamps
-            time.sleep(ts - ts_prev)
+            sleep_time = ts - ts_prev
+            if sleep_time > MAX_IDLE_TIME:
+                if options.debug:
+                    print ""
+                    print "  The server was supposed to stay idle for %.1f minutes here." % (sleep_time / 60.0),
+                    print "Idle time period skipped.",
+            else:
+                time.sleep(sleep_time)
         ts_prev = ts
         
         # ================================= debug output =================================
