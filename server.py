@@ -32,13 +32,13 @@ def parseArgs():
     # Parse command-line arguments
     parser = OptionParser()
     parser.add_option("-f", "--file", action="store", type="string", dest="filename",
-            help="pcap file containing files to be retransmitted", default="2013-06-30-1.pcap")
+                      help="pcap file containing files to be retransmitted", default="2013-06-30-1.pcap")
     parser.add_option("-s", "--skip", action="store", type="int", dest="skip_time",
-            help="time in seconds to skip at the beginning", default="2453")
+                      help="time in seconds to skip at the beginning", default="2453")
     parser.add_option("-t", "--fast", action="store_true", dest="fast",
-            help="send packets immediately one after another ignoring time intervals", default=False)
+                      help="send packets immediately one after another ignoring time intervals", default=False)
     parser.add_option("-d", "--debug", action="store_true", dest="debug",
-            help="show debug messages", default=False)
+                      help="show debug messages", default=False)
     (options, args) = parser.parse_args()
 
 def showOptions():
@@ -63,15 +63,15 @@ def processFrames():
     # open the file
     f = open(options.filename, 'rb')
     pcap = dpkt.pcap.Reader(f)
-    
+
     # read the very first frame only
     for ts, pkt in pcap: 
         ts_first = ts # retrieve the very first timestamp
         break # sorry... not the most elegant way to access a single element
-    
+
     if options.debug:
         print "Frames (second, frames during that second):"
-    
+
     # read all frames from the file and process them
     for ts, pkt in pcap:
         ts_offset = ts - ts_first # timestamp offset from the very first frame timestamp
@@ -90,7 +90,7 @@ def processFrames():
             else:
                 time.sleep(sleep_time)
         ts_prev = ts
-        
+
         # ================================= debug output =================================
         if options.debug:
             time_str = "%6.0f" % ts_offset
@@ -101,7 +101,7 @@ def processFrames():
             sys.stdout.write('.')
             time_str_prev = time_str
         # ================================================================================
-        
+
         data = extractData(ts, pkt)
         if data != None:
             sock.sendto(data, (IP, PORT))
@@ -113,24 +113,24 @@ def processFrames():
 def extractData(ts, pkt):
     """ This functions send a network packet """
     global sock
-    
+
     # link layer (ethernet)
     eth = dpkt.ethernet.Ethernet(pkt)
     if eth.type != dpkt.ethernet.ETH_TYPE_IP:
         if options.debug:
             sys.stdout.write("[not IPv4]")
         return None
-        
+
     # network layer (IPv4)
     ip = eth.data
     if ip.p != dpkt.ip.IP_PROTO_UDP:
         if options.debug:
             sys.stdout.write("[not UDP]")
         return None
-    
+
     # transport layer (UDP)
     udp = ip.data
     return udp.data
-    
+
 if __name__ == "__main__":
     main()
